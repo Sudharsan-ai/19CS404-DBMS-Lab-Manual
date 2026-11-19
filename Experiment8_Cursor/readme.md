@@ -77,13 +77,43 @@ END;
 - Implement exception handling to catch the relevant exceptions and display appropriate messages.
 ### Program
 ```
+-- SUDHARSAN S(212224040334)
+DECLARE
+    v_name employees.emp_name%TYPE;
+    v_desig employees.designation%TYPE;
+    v_count NUMBER := 0;
+    no_records_found EXCEPTION;
+
+    CURSOR emp_cursor IS
+        SELECT emp_name, designation FROM employees;
+BEGIN
+    OPEN emp_cursor;
+    LOOP
+        FETCH emp_cursor INTO v_name, v_desig;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        v_count := v_count + 1;
+        DBMS_OUTPUT.PUT_LINE('Name: ' || v_name || ', Designation: ' || v_desig);
+    END LOOP;
+    CLOSE emp_cursor;
+
+    IF v_count = 0 THEN
+        RAISE no_records_found;
+    END IF;
+
+EXCEPTION
+    WHEN no_records_found THEN
+        DBMS_OUTPUT.PUT_LINE('Error: No employee records found.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Unexpected Error: ' || SQLERRM);
+END;
 
 ```
 
-### Output
-
 **Output:**  
 The program should display the employee details or an error message.
+
+### Output
+<img width="806" height="995" alt="image" src="https://github.com/user-attachments/assets/b7abb357-6f92-42df-9764-f1da487b1102" />
 
 ---
 
